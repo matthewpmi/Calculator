@@ -1,87 +1,88 @@
-// to add:
-// if display last char string functions:
-// if display last char == operator and operator selected -> replace operator with new selection
-// if display last char == nothing, do not allow operator input
-// if display last char == number && display includes operator && operator selected -> run operation -> return result -> allow result to be included in next calculation.
-
-
-//get elements: display, buttons, display text
-const display = document.querySelector('.display');
-
-let buttons = Array.from(document.querySelectorAll('button'));
-
-let problem = display.innerText
-
-//function to display numbers/operators on 'click'
-buttons.map(button => {
-    button.addEventListener('click', (e) => {
-        switch(e.target.innerText){
-            case 'AC': 
-                display.innerText = '';
-                break;
-            case 'Delete':
-                if(display.innerText){
-                display.innerText = display.innerText.slice(0, -1);
-                }
-                break;
-            case '+':
-            case '-':
-            case '*':
-            case '÷':
-                // switch(display.innerText.charAt(display.innerText.length - 1)){
-                //     case [0-9]: display.innerText += e.target.innerText;
-                //     case '': return false; 
-                //     case '+':
-                //     case '-':
-                //     case '*':
-                //     case '÷':
-                //         display.innerText.slice(0, -1) + e.target.innerText;
-                // }
-                
-            //     if (display.innerText.length === 0) {
-            //         return false;
-            //     }
-            //     // else if(display.innerText && !(display.innerText.charAt(display.innerText.length - 1) == '+' || '-' || '*' || '÷')) {
-            //     //     display.innerText += e.target.innerText;
-            //     // }
-
-            //     // else if (display.innerText.charAt(display.innerText.length-1) == '+' || '-' || '*' || '÷') {
-            //     //     display.innerText.slice(0, -1) + e.target.innerText;
-            //     // }
-            //     else {
-            //         display.innerText += e.target.innerText;
-            //     }
-            //     break;
-
-            // // case '=':
-            // //     operate()
-            default:
-                display.innerText += e.target.innerText;
-        };
+// operate function(s)
+function add(a,b){
+    return a + b;
+}
+function subtract(a,b){
+    return a - b;
+}
+function multiply(a,b){
+    return a * b;
+}
+function divide(a,b){
+    return a / b;
+}
+function operate(operand1, operand2, operator){
+    switch(operator){
+        case '+':
+            return add(operand1, operand2);
+        case '-':
+            return subtract(operand1, operand2);
+        case '*':
+            return multiply(operand1, operand2);
+        case '÷':
+            if(operand2 === 0){
+                return alert("you can't")
+            }
+            else{
+            return divide(operand1, operand2);
+            }
+    }
+}
+// variables for operate function
+let firstInput = '';
+let currentOperator = '';
+let secondInput = '';
+let result = '';
+// dom values
+const display = document.querySelector('.display')
+const numbers = Array.from(document.querySelectorAll('.number'))
+const decimal = document.querySelector('#decimal')
+const operator = Array.from(document.querySelectorAll('.operator'))
+const clear = document.querySelector('#clear')
+const backspace = document.querySelector('#delete')
+const equals = document.querySelector('#equals')
+// populate display with number click
+numbers.forEach((n) => {
+    n.addEventListener('click', (e) => {
+        if(firstInput){
+            display.innerText = e.target.innerText;
+            secondInput += e.target.innerText
+        }
+        else{
+            display.innerText += e.target.innerText;
+        }
     })
 })
+operator.forEach((o) => {
+    o.addEventListener('click', (e) => {
+        if(operator.forEach((o) => o.classList.contains('function-select'))){
+            operator.forEach((o) => o.classList.remove('function-select'));
+        }
+        e.target.classList.toggle('function-select');
+        firstInput = display.innerText; // works only when firstInput is initially set to ''. doesn't work when set to null.
+        currentOperator = e.target.innerText;
+    })
+})
+clear.addEventListener('click', () => {
+    display.innerText = '';
+    firstInput = '';
+    secondInput = '';
+    result = '';
+    operator.forEach((o) => o.classList.remove('function-select'));
+})
+backspace.addEventListener('click', () => {
+    display.innerText = display.innerText.slice(0, -1);
 
-//function to run calculations
+})
+decimal.addEventListener('click', () => {
+    if(!display.innerText.includes(decimal.innerText)){
+        display.innerText += decimal.innerText;
+    }
+})
+equals.addEventListener('click', () => {
+    result = operate(Number(firstInput),Number(secondInput),currentOperator);
+    display.innerText = result;
+    operator.forEach((o) => o.classList.remove('function-select'));
+    currentOperator = '';
+})
 
-
-const operations = {
-    "+" : function (operand1, operand2) {
-        return operand1 + operand2;
-    },
-    "-" : function (operand1, operand2) {
-        return operand1 - operand2;
-    },
-    "*" : function (operand1, operand2) {
-        return operand1 * operand2;
-    },
-    "÷" : function (operand1, operand2) {
-        return operand1 / operand2;
-    },
-}
-function operate(list, operator) {
-    return list.reduce(operations[operator]);
-}
-
-console.log(operate([3, 4, 6, 8],'*'))
-
-console.log(display.innerText.charAt(display.innerText.length - 1))
