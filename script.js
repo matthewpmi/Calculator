@@ -55,8 +55,9 @@ numbers.forEach((n) => {
 })
 operator.forEach((o) => {
     o.addEventListener('click', (e) => {
-        if(operator.forEach((o) => o.classList.contains('function-select'))){
-            operator.forEach((o) => o.classList.remove('function-select'));
+        if(currentOperator && secondInput){
+            display.innerText = operate(Number(firstInput),Number(secondInput),currentOperator);
+            secondInput = '';
         }
         e.target.classList.toggle('function-select');
         firstInput = display.innerText; // works only when firstInput is initially set to ''. doesn't work when set to null.
@@ -80,9 +81,18 @@ decimal.addEventListener('click', () => {
     }
 })
 equals.addEventListener('click', () => {
-    result = operate(Number(firstInput),Number(secondInput),currentOperator);
-    display.innerText = result;
-    operator.forEach((o) => o.classList.remove('function-select'));
-    currentOperator = '';
+    if(!display.innerText){
+        return false;
+    }
+    else if(!firstInput || !secondInput || !currentOperator){
+        return false;
+    }
+    else
+        {result = operate(Number(firstInput),Number(secondInput),currentOperator);
+        display.innerText = result;
+        operator.forEach((o) => o.classList.remove('function-select'));
+        currentOperator = '';
+        firstInput = result;
+        secondInput = '';}
 })
 
