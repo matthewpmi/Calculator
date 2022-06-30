@@ -45,8 +45,8 @@ const equals = document.querySelector('#equals')
 numbers.forEach((n) => {
     n.addEventListener('click', (e) => {
         if(firstInput){
-            display.innerText += e.target.innerText;
             secondInput += e.target.innerText
+            display.innerText = secondInput;
         }
         else{
             display.innerText += e.target.innerText;
