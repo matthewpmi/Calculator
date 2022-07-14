@@ -33,6 +33,7 @@ let firstInput = '';
 let currentOperator = '';
 let secondInput = '';
 let result = '';
+let resultInput = '';
 // dom values
 const display = document.querySelector('.display')
 const numbers = Array.from(document.querySelectorAll('.number'))
@@ -41,11 +42,17 @@ const operator = Array.from(document.querySelectorAll('.operator'))
 const clear = document.querySelector('#clear')
 const backspace = document.querySelector('#delete')
 const equals = document.querySelector('#equals')
+const plusMinus = document.querySelector('.plus-minus')
 // populate display with number click
 numbers.forEach((n) => {
     n.addEventListener('click', (e) => {
-        if(firstInput){
-            secondInput += e.target.innerText
+        if(resultInput && !currentOperator){
+            resultInput = '';
+            display.innerText = '';
+            display.innerText += e.target.innerText;
+        }
+        else if (firstInput && currentOperator){
+            secondInput += e.target.innerText;
             display.innerText = secondInput;
         }
         else{
@@ -73,6 +80,7 @@ clear.addEventListener('click', () => {
 })
 backspace.addEventListener('click', () => {
     display.innerText = display.innerText.slice(0, -1);
+    secondInput = secondInput.slice(0, -1);
 
 })
 decimal.addEventListener('click', () => {
@@ -92,7 +100,12 @@ equals.addEventListener('click', () => {
         display.innerText = result;
         operator.forEach((o) => o.classList.remove('function-select'));
         currentOperator = '';
-        firstInput = result;
+        resultInput = result;
         secondInput = '';}
 })
+plusMinus.addEventListener('click', () => {
 
+})
+
+// decimal doesnt work with second number
+// work on negative
